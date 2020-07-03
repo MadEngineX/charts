@@ -154,6 +154,12 @@ spec:
             - mountPath: /var/jenkins_plugins
               name: plugin-dir
             {{- end }}
+            {{- range .Values.master.extraConfigmapMounts }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+              subPath: {{ .subPath | default "" }}
+              readOnly: {{ .readOnly }}
+            {{- end }}            
       containers:
         - name: jenkins
 {{- if .Values.master.imageTag }}
@@ -401,6 +407,12 @@ spec:
           - key: jenkins-jks-file
             path: {{ .Values.master.httpsKeyStore.fileName }}
       {{- end }}
+
+      {{- range .Values.master.extraConfigmapMounts }}
+      - name: {{ .name }}
+        configMap:
+          name: {{ .configMap }}
+      {{- end }}      
 
 {{- if .Values.master.imagePullSecretName }}
       imagePullSecrets:

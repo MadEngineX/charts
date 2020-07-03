@@ -223,6 +223,14 @@ master:
   # - name: BuildInfoProxy
   #   port: 9000
 
+  # You can add ExtraCofigMap for example to append Root CA certificate 
+  extraConfigmapMounts: []
+  # - name: ca-cert-root
+  #   mountPath: /etc/ssl/certs/ca-cert-root.pem
+  #   subPath: ca-cert-root.pem # (optional)
+  #   configMap: root-ca
+  #   readOnly: true    
+
   # List of plugins to be install during Jenkins master start
   installPlugins:
     - kubernetes:1.25.7
