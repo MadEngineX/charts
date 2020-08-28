@@ -1,0 +1,41 @@
+master:
+  volumes:
+    - type: Secret
+      secretName: k8s-stage-cert
+      mountPath: /etc/ssl/certs/smp-ca.crt
+      readOnly: true
+      subPath: smp-ca.crt
+  
+  # - name: wk8s-stage
+  #   mountPath: /etc/ssl/certs/wk8s-stage.pem
+  #   subPath: wk8s-stage.pem # (optional)
+  #   configMap: wk8s-stage
+  #   readOnly: true    
+  # - name: wk8s-stages
+  #   mountPath: /etc/ssl/certs/wk8s-stages.crt
+  #   subPath: wk8s-stages.crt # (optional)
+  #   configMap: wk8s-stages 
+  #   readOnly: true      
+  # - name: ca-certificates
+  #   mountPath: /etc/ssl/certs/ca-certificates.crt
+  #   subPath: ca-certificates.crt # (optional)
+  #   configMap: ca-certificates 
+  #   readOnly: true            
+  ingress:
+    enabled: true
+    apiVersion: "networking.k8s.io/v1beta1"
+    hostName: jenkins-test.k8s-stage.smpbank
+    tls:
+      - secretName: wild-tls
+        hosts:
+          - jenkins-test.k8s-stage.smpbank 
+  prometheus:
+    enabled: true
+    serviceMonitorAdditionalLabels: 
+      release: monitoring
+    scrapeEndpoint: /metrics
+
+persistence:
+  enabled: true
+  storageClass: standard
+  size: "10Gi"
